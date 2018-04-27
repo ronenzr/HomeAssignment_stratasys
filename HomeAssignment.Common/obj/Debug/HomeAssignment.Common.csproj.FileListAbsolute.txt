@@ -1,0 +1,9 @@
+c:\users\ronen\source\repos\HomeAssignment_Print\HomeAssignment.Common\obj\Debug\HomeAssignment.Common.csprojResolveAssemblyReference.cache
+c:\users\ronen\source\repos\HomeAssignment_Print\HomeAssignment.Common\obj\Debug\HomeAssignment.Common.csproj.CoreCompileInputs.cache
+c:\users\ronen\source\repos\HomeAssignment_Print\HomeAssignment.Common\bin\Debug\HomeAssignment.Common.dll
+c:\users\ronen\source\repos\HomeAssignment_Print\HomeAssignment.Common\bin\Debug\HomeAssignment.Common.pdb
+c:\users\ronen\source\repos\HomeAssignment_Print\HomeAssignment.Common\bin\Debug\Newtonsoft.Json.dll
+c:\users\ronen\source\repos\HomeAssignment_Print\HomeAssignment.Common\bin\Debug\Newtonsoft.Json.xml
+c:\users\ronen\source\repos\HomeAssignment_Print\HomeAssignment.Common\obj\Debug\HomeAssignment.Common.csproj.CopyComplete
+c:\users\ronen\source\repos\HomeAssignment_Print\HomeAssignment.Common\obj\Debug\HomeAssignment.Common.dll
+c:\users\ronen\source\repos\HomeAssignment_Print\HomeAssignment.Common\obj\Debug\HomeAssignment.Common.pdb

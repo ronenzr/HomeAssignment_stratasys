@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<script src="angular.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="bootstrap.css">
+	<meta charset="utf-8">
+	<title>Printer App</title>
+</head>
+<body ng-app="printerApp" ng-controller="mainCtrl" class="bg-light">
+	<main role="main" class="container">
+		<br />
+		<h1>Printer App</h1>
+
+		<br />
+		<br />
+		<form id="printer-form" class="col-md-4">
+			<div class="form-label-group">
+				<input id="print-name" placeholder="name" class="form-control" ng-model="print.name"><br />
+				<input id="print-duration" placeholder="duration" class="form-control" ng-model="print.duration">
+			</div>
+			<br />
+			<button ng-click="addPrint()" class="btn btn-secondary my-2">Print!</button>
+		</form>
+
+		<section class="my-3 p-3 bg-white rounded box-shadow" id="main" ng-show="queue.length" ng-cloak>
+			<div id="print-job-list">
+				<div ng-repeat="job in queue" class="media pt-3">
+					<div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray ">
+						<label style="width: 400px">{{job.Name}} - {{job.Duration}} </label> <button type="button" ng-class=" job.Status.Status == 'Printing' ? 'btn-primary' : 'btn-default'" class="btn ">{{job.Status.Status}}</button> <button class="btn btn-default" ng-click="deleteJob(job)">delete</button> <button class="btn btn-default" ng-click="move(job, 1)">up</button> <button class="btn btn-default" ng-click="move(job, 2)">down</button>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+	<script>
+		var app = angular.module("printerApp", []);
+		app.controller("mainCtrl", function ($scope, $http, $interval) {
+			$scope.queue = [];
+			$interval(function () {
+				$scope.getQueue()
+			}, 2000);
+			$scope.addPrint = function (data) {
+				//$scope.queue.push(newPrint);
+				for (var i = 0; i < 5; i++) {
+					var newPrint = {
+						name: $scope.print.name + ' ' + (i + 1),
+						duration: $scope.print.duration
+					}
+					$scope.add(newPrint);
+				}
+			}
+			$scope.add = function (job) {
+				$http.post('/api/printer', job).
+					then(function (response) {
+						$scope.getQueue();
+					});
+			}
+			$scope.getQueue = function () {
+				$http.get('/api/printer/query').
+					then(function (response) {
+						$scope.queue = response.data;
+					});
+			}
+			$scope.deleteJob = function (job) {
+				$http.delete('/api/printer', {
+					headers: { 'Content-Type': 'application/json' },
+					data: job
+				}).then(function (response) {
+					$scope.getQueue();
+				});
+			}
+			$scope.move = function (job, direction) {
+				$http.put('/api/printer/direction/' + direction, job).then(function (response) {
+					$scope.getQueue();
+				});
+			}
+		});
+
+	</script>
+</body>
+</html>
