@@ -158,7 +158,7 @@
   <ItemGroup>
     <Content Include="app\angular.min.js" />
     <Content Include="app\bootstrap.css" />
-    <Content Include="app\index.html" />
+    <Content Include="index.htm" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="ApplicationInsights.config">
