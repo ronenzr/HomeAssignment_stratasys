@@ -1,8 +1,8 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-	<script src="angular.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="bootstrap.css">
+	<script src="app/angular.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="app/bootstrap.css">
 	<meta charset="utf-8">
 	<title>Printer App</title>
 </head>
@@ -16,7 +16,7 @@
 		<form id="printer-form" class="col-md-4">
 			<div class="form-label-group">
 				<input id="print-name" placeholder="name" class="form-control" ng-model="print.name"><br />
-				<input id="print-duration" placeholder="duration" class="form-control" ng-model="print.duration">
+				<input id="print-duration" placeholder="duration (in miliseconds)" class="form-control" ng-model="print.duration">
 			</div>
 			<br />
 			<button ng-click="addPrint()" class="btn btn-secondary my-2">Print!</button>
