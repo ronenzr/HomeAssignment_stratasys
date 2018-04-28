@@ -11,7 +11,16 @@ namespace HomeAssignment.Common.Entities
         {
             Status = new JobStatus(PrintStatus.Queued.ToString(), DateTime.Now);
         }
-        public String Name { get; set; }
+
+        public JobDetails(string name, int duration)
+        {
+            Name = name;
+            Duration = duration;
+            Status = new JobStatus(PrintStatus.Queued.ToString(), DateTime.Now);
+        }
+
+
+        public string Name { get; set; }
         public int Duration { get; set; }
         public IStatus Status { get; set; }
     }

@@ -9,6 +9,9 @@ using System.Threading;
 
 namespace HomeAssignment.ApplicationServices.Executors
 {
+    /// <summary>
+    /// PrintExecutor - Executes print jobs in a synchronous way using execution queue.
+    /// </summary>
     public class PrintExecutor : IJobExecutor<JobDetails>
     {
         private IDynamicQueue<JobDetails> queueList;
@@ -23,6 +26,9 @@ namespace HomeAssignment.ApplicationServices.Executors
             queueList = _queue;
         }
 
+        /// <summary>
+        /// CancelCurrent - Cancels currently executed job. will be remove from queue.
+        /// </summary>
         public void CancelCurrent()
         {
             currentJob = null;
@@ -32,6 +38,11 @@ namespace HomeAssignment.ApplicationServices.Executors
             }
         }
 
+        /// <summary>
+        /// Execute - Should actually be doing the printing.
+        ///           But for now it is just doing nothing without causing blocking.
+        /// </summary>
+        /// <param name="toExecute">toExecute - job to execute</param>
         public void Execute(JobDetails toExecute)
         {
             lock (classLock)
@@ -42,6 +53,9 @@ namespace HomeAssignment.ApplicationServices.Executors
             //TODO: print
         }
 
+        /// <summary>
+        /// Start - Starting..
+        /// </summary>
         public void Start()
         {
             isWorking = true;
@@ -66,6 +80,9 @@ namespace HomeAssignment.ApplicationServices.Executors
             }
         }
 
+        /// <summary>
+        /// Stop - Stoping..
+        /// </summary>
         public void Stop()
         {
             timer.Dispose();

@@ -43,12 +43,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Constants\Direction.cs" />
+    <Compile Include="Constants\Enums.cs" />
     <Compile Include="Entities\JobDetails.cs" />
     <Compile Include="Entities\JobQueue.cs" />
     <Compile Include="Entities\JobStatus.cs" />
     <Compile Include="Entities\JsonUtility.cs" />
     <Compile Include="Entities\PeriodicTask.cs" />
+    <Compile Include="Exceptions\JobQueueOperationException.cs" />
     <Compile Include="Exceptions\EnqueueFailureException.cs" />
     <Compile Include="Interfaces\IDynamicQueue.cs" />
     <Compile Include="Interfaces\IJobExecutor.cs" />

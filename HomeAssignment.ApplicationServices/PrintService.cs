@@ -6,11 +6,16 @@ using HomeAssignment.Common.Entities;
 using HomeAssignment.Common.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 
 namespace HomeAssignment.ApplicationServices
 {
+    /// <summary>
+    /// PrintService - Provide CRUD operations for printer execution queue.
+    ///                Runs printer executor
+    /// </summary>
     public class PrintService : IJobService<JobDetails>, IDisposable
     {
         private string backupFileLocation;
@@ -25,34 +30,47 @@ namespace HomeAssignment.ApplicationServices
             executor.Start();
         }
 
+        //for unittests/DI
+        public PrintService(IDynamicQueue<JobDetails> _queue, IJobExecutor<JobDetails> _executor)
+        {
+            queue = _queue;
+            executor = _executor;
+            executor.Start();
+        }
+
+        /// <summary>
+        /// AddJob - Adds a new job to the execution queue.
+        ///          Jobs with empty names or an existing name will cause exception
+        /// </summary>
+        /// <param name="jobToAdd">Job to be added to the queue.</param>
+        /// <returns>Job Status (Printing/Queued)</returns>
         public IStatus AddJob(JobDetails jobToAdd)
         {
+            IStatus status = null;
             JobDetails added = queue.Enqueue(jobToAdd);
-            return added.Status;
-        }
-
-        public IStatus MoveJob(JobDetails job, Direction direction)
-        {
-            VerifyPrintingStatus(job);
-            int ind = -1;
-            if (direction.Equals(Direction.Up))
+            if (added != null)
             {
-                ind = queue.MoveUp(job);
-            } else
-            {
-                ind = queue.MoveDown(job);
+                status = added.Status;
             }
-            
-            return GenerateJobStatus(ind);
+            return status;
         }
 
-
+        /// <summary>
+        /// DeleteJob - Removes the job from execution queue.
+        ///             Trying to remove the top job will throw exception.
+        /// </summary>
+        /// <param name="job">Job to be removed.</param>
+        /// <returns>success/fail</returns>
         public bool DeleteJob(JobDetails job)
         {
-            VerifyPrintingStatus(job);
             return queue.Remove(job);
         }
 
+        /// <summary>
+        /// CancelJob - Cancel the job that is currently being executed.
+        ///             Canceled job will also be removed from queue.
+        /// </summary>
+        /// <returns>success/fail</returns>
         public bool CancelJob()
         {
             try
@@ -67,11 +85,48 @@ namespace HomeAssignment.ApplicationServices
             return true;
         }
 
+        /// <summary>
+        /// MoveJob - Move job up or down in execution queue, according to direction.
+        ///           Trying to move the executed job (top of queue) will throw exception.
+        /// </summary>
+        /// <param name="job">Job to be moved. (by job name)</param>
+        /// <param name="direction">up/down</param>
+        /// <returns>Job Status (Printing/Queued)</returns>
+        public IStatus MoveJob(JobDetails job, Direction direction)
+        {
+            int ind = -1;
+            if (direction.Equals(Direction.Up))
+            {
+                ind = queue.MoveUp(job);
+            } else
+            {
+                ind = queue.MoveDown(job);
+            }
+            
+            return GenerateJobStatus(ind);
+        }
+
+        /// <summary>
+        /// GetJobQueue - Retrieves the execution queue as a collection.
+        /// </summary>
+        /// <returns>Collection of jobs</returns>
         public IEnumerable<JobDetails> GetJobQueue()
         {
             return queue.ToList();
         }
 
+        /// <summary>
+        /// Dispose - Disposing of this service.
+        ///           Saving queue to a file and stoping the executor.
+        /// </summary>
+        public void Dispose()
+        {
+            Debug.Write("printerService end");
+            executor.Stop();
+            SaveQueue();
+        }
+
+        #region private method
         private IStatus GenerateJobStatus(int ind)
         {
             string status = PrintStatus.Queued.ToString();
@@ -88,17 +143,13 @@ namespace HomeAssignment.ApplicationServices
         private void VerifyPrintingStatus(JobDetails job)
         {
             JobDetails printingJob = queue.Peek();
-            if(printingJob != null && printingJob.Name.Equals(job.Name))
+            if (printingJob != null && printingJob.Name.Equals(job.Name))
             {
                 throw new OperationOnPrintingJobException();
             }
         }
 
-        public void Dispose()
-        {
-            executor.Stop();
-            SaveQueue();
-        }
+
 
         private void LoadQueueFromFile()
         {
@@ -108,9 +159,10 @@ namespace HomeAssignment.ApplicationServices
             {
                 backup = JsonUtility.FromFile<List<JobDetails>>(this.backupFileLocation);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
             }
-                
+
             queue = new JobQueue(backup);
         }
 
@@ -119,5 +171,6 @@ namespace HomeAssignment.ApplicationServices
             IEnumerable<JobDetails> toSave = GetJobQueue();
             JsonUtility.ToFile(backupFileLocation, toSave);
         }
+        #endregion
     }
 }

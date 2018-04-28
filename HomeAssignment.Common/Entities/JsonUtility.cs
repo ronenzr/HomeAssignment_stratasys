@@ -10,21 +10,36 @@ namespace HomeAssignment.Common.Entities
     {
         public static T FromFile<T>(string filePath) where T : class
         {
-            //return null;
-            if (File.Exists(filePath))
+            try
             {
-                string json = File.ReadAllText(filePath);
-                return JsonConvert.DeserializeObject<T>(json);
+                //return null;
+                if (File.Exists(filePath))
+                {
+                    string json = File.ReadAllText(filePath);
+                    return JsonConvert.DeserializeObject<T>(json);
+                }
             }
+            catch (Exception)
+            {
+                //TODO: write to log
+            }
+            
 
             return null;
         }
 
         public static void ToFile<T>(string filePath, T toSave)
         {
-            string json = JsonConvert.SerializeObject(toSave);
+            try
+            {
+                string json = JsonConvert.SerializeObject(toSave);
 
-            File.WriteAllText(filePath, json);
+                File.WriteAllText(filePath, json);
+            }
+            catch (Exception)
+            {
+                //TODO: write to log
+            }
         }
     }
 }
