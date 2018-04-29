@@ -126,6 +126,11 @@ namespace HomeAssignment.ApplicationServices
             SaveQueue();
         }
 
+        ~PrintService()
+        {
+            Dispose();
+        }
+
         #region private method
         private IStatus GenerateJobStatus(int ind)
         {

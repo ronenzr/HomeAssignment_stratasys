@@ -25,27 +25,11 @@ namespace HomeAssignment_Print
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
 
-        protected void Application_End()
-        {
-            AppCleanUp();
-        }
-
         private void AppInit()
         {
             Debug.Write("Application_Start");
             //TODO: us DI instead of manually instantiating service
-            HttpContext.Current.Application["PrintService"] = new PrintService(Directory.GetCurrentDirectory() + "\\queue.json");
-        }
-
-        private void AppCleanUp()
-        {
-            Debug.Write("Application_End");
-            //make sure the print service is disposed as expected
-            if (HttpContext.Current.Application["PrintService"] != null)
-            {
-                PrintService temp = (PrintService)HttpContext.Current.Application["PrintService"];
-                temp.Dispose();
-            }
+            HttpContext.Current.Application["PrintService"] = new PrintService(AppDomain.CurrentDomain.BaseDirectory + "\\queue.json");
         }
     }
 }
