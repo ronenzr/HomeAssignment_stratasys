@@ -13,7 +13,7 @@ For this app to run properly the following tools are needed:
 ## Get Started
 
 Clone this repository or download the zip file and extract its content to a directory.
-Open the solution with Visaul Studio and build the solution.
+Open the solution with Visual Studio and build the solution.
 Use IIS (or IISExpress) to run the app by creating a new Website:
   1. Open IIS
   2. Right click on sites and select Add Website.
